@@ -1,0 +1,52 @@
+# CodeRabbit Configuration File
+# Visit https://coderabbit.ai to learn more
+
+# Language and frameworks
+language: en-US
+
+# Review settings
+reviews:
+  # Review profile: "chill" or "assertive"
+  profile: chill
+  
+  # Request changes for high-severity issues
+  request_changes_workflow: true
+  
+  # Enable auto-reviews on pull requests
+  auto_review:
+    enabled: true
+    drafts: false
+  
+  # Path filters - array of glob patterns
+  # Use positive globs for includes and negated globs (!) for excludes
+  path_filters:
+    - "**/*.ts"
+    - "**/*.tsx"
+    - "**/*.js"
+    - "**/*.jsx"
+    - "**/*.json"
+    - "**/*.md"
+    - "!**/node_modules/**"
+    - "!**/dist/**"
+    - "!**/build/**"
+    - "!**/.next/**"
+    - "!**/coverage/**"
+    - "!**/*.min.js"
+    - "!**/*.min.css"
+  
+  # Pre-merge checks configuration
+  pre_merge_checks:
+    # Custom checks (add project-specific rules here)
+    custom_checks: []
+
+# Tone and style
+tone_instructions: |
+  - Be concise and constructive
+  - Focus on actionable feedback
+  - Highlight both improvements and good practices
+  - Use clear examples when suggesting changes
+
+# Chat settings
+chat:
+  enabled: true
+  auto_reply: true
