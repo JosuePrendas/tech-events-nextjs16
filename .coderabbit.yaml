@@ -1,0 +1,73 @@
+# CodeRabbit Configuration File
+# Visit https://coderabbit.ai to learn more
+
+# Language and frameworks
+language: en-US
+
+# Review settings
+reviews:
+  # Request changes for high-severity issues
+  request_changes_workflow: true
+  
+  # Enable auto-reviews on pull requests
+  auto_review:
+    enabled: true
+    drafts: false
+  
+  # Review levels: basic, standard, comprehensive
+  level: standard
+  
+  # Code suggestions
+  suggestions:
+    enabled: true
+    auto_apply: false
+
+# Path-based configurations
+path_filters:
+  # Include paths
+  include:
+    - "**/*.ts"
+    - "**/*.tsx"
+    - "**/*.js"
+    - "**/*.jsx"
+    - "**/*.json"
+    - "**/*.md"
+  
+  # Exclude paths
+  exclude:
+    - "**/node_modules/**"
+    - "**/dist/**"
+    - "**/build/**"
+    - "**/.next/**"
+    - "**/coverage/**"
+    - "**/*.min.js"
+    - "**/*.min.css"
+
+# Issue detection
+checks:
+  # Code quality checks
+  code_quality: true
+  
+  # Security vulnerability checks
+  security: true
+  
+  # Performance issues
+  performance: true
+  
+  # Best practices
+  best_practices: true
+
+# Tone and style
+tone_instructions: |
+  - Be concise and constructive
+  - Focus on actionable feedback
+  - Highlight both improvements and good practices
+  - Use clear examples when suggesting changes
+
+# Custom rules (optional)
+# Add project-specific rules here
+custom_rules: []
+
+# Chat settings
+chat:
+  enabled: true
