@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // Enable instrumentation for database initialization
+  experimental: {
+    instrumentationHook: true,
+  },
   async rewrites() {
     return [
       {

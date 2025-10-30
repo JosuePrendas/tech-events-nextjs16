@@ -32,9 +32,10 @@ if (!global.mongoose) {
 /**
  * Establishes a connection to MongoDB using Mongoose
  * Caches the connection to prevent multiple connections during development hot reloads
+ * Idempotent - can be called multiple times safely
  * @returns Promise that resolves to the Mongoose instance
  */
-async function connectDB(): Promise<typeof mongoose> {
+export async function connectDB(): Promise<typeof mongoose> {
   // Return existing connection if already established
   if (cached.conn) {
     return cached.conn;
@@ -48,7 +49,11 @@ async function connectDB(): Promise<typeof mongoose> {
 
     // Create new connection promise
     cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongoose) => {
+      console.log('✅ MongoDB connected successfully');
       return mongoose;
+    }).catch((error) => {
+      console.error('❌ MongoDB connection error:', error);
+      throw error;
     });
   }
 
@@ -58,6 +63,7 @@ async function connectDB(): Promise<typeof mongoose> {
   } catch (e) {
     // Clear the promise on error so next call can retry
     cached.promise = null;
+    console.error('❌ Failed to establish MongoDB connection:', e);
     throw e;
   }
 

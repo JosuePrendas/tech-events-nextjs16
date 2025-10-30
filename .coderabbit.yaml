@@ -6,6 +6,9 @@ language: en-US
 
 # Review settings
 reviews:
+  # Review profile: "chill" or "assertive"
+  profile: chill
+  
   # Request changes for high-severity issues
   request_changes_workflow: true
   
@@ -14,48 +17,27 @@ reviews:
     enabled: true
     drafts: false
   
-  # Review levels: basic, standard, comprehensive
-  level: standard
-  
-  # Code suggestions
-  suggestions:
-    enabled: true
-    auto_apply: false
-
-# Path-based configurations
-path_filters:
-  # Include paths
-  include:
+  # Path filters - array of glob patterns
+  # Use positive globs for includes and negated globs (!) for excludes
+  path_filters:
     - "**/*.ts"
     - "**/*.tsx"
     - "**/*.js"
     - "**/*.jsx"
     - "**/*.json"
     - "**/*.md"
+    - "!**/node_modules/**"
+    - "!**/dist/**"
+    - "!**/build/**"
+    - "!**/.next/**"
+    - "!**/coverage/**"
+    - "!**/*.min.js"
+    - "!**/*.min.css"
   
-  # Exclude paths
-  exclude:
-    - "**/node_modules/**"
-    - "**/dist/**"
-    - "**/build/**"
-    - "**/.next/**"
-    - "**/coverage/**"
-    - "**/*.min.js"
-    - "**/*.min.css"
-
-# Issue detection
-checks:
-  # Code quality checks
-  code_quality: true
-  
-  # Security vulnerability checks
-  security: true
-  
-  # Performance issues
-  performance: true
-  
-  # Best practices
-  best_practices: true
+  # Pre-merge checks configuration
+  pre_merge_checks:
+    # Custom checks (add project-specific rules here)
+    custom_checks: []
 
 # Tone and style
 tone_instructions: |
@@ -64,10 +46,7 @@ tone_instructions: |
   - Highlight both improvements and good practices
   - Use clear examples when suggesting changes
 
-# Custom rules (optional)
-# Add project-specific rules here
-custom_rules: []
-
 # Chat settings
 chat:
   enabled: true
+  auto_reply: true
