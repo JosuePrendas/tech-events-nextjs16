@@ -2,33 +2,14 @@ import AnimatedContent from "@/components/AnimatedContent";
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
 import FadeContent from "@/components/FadeContent";
-import LogoLoop from "@/components/LogoLoop";
-import ShinyText from "@/components/ShinyText";
-import SplitText from "@/components/SplitText";
-import { Event, events } from "@/lib/constants";
-// import {
-//   SiReact,
-//   SiNextdotjs,
-//   SiTypescript,
-//   SiTailwindcss,
-// } from "react-icons/si";
+import { IEvent } from "@/database";
 
-// const techLogos = [
-//   { node: <SiReact />, title: "React", href: "https://react.dev" },
-//   { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
-//   {
-//     node: <SiTypescript />,
-//     title: "TypeScript",
-//     href: "https://www.typescriptlang.org",
-//   },
-//   {
-//     node: <SiTailwindcss />,
-//     title: "Tailwind CSS",
-//     href: "https://tailwindcss.com",
-//   },
-// ];
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const Home = () => {
+const Home = async () => {
+  const response = await fetch(`${BASE_URL}/api/events`);
+  const { events } = await response.json();
+
   return (
     <section>
       <AnimatedContent
@@ -75,9 +56,11 @@ const Home = () => {
         <div className="mt-20 space-y-5">
           <h3>Featured Events</h3>
           <div id="events" className="events">
-            {events.map((event: Event, index: number) => (
-              <EventCard key={index} {...event} />
-            ))}
+            {events &&
+              events.length > 0 &&
+              events.map((event: IEvent, index: number) => (
+                <EventCard key={index} {...event} />
+              ))}
           </div>
         </div>
       </FadeContent>
