@@ -270,9 +270,22 @@
       }
     }
   }
-}
 
-li {
-  margin-left: 0;
-  list-style: none;
+  input {
+    padding: 12px 20px;
+    border-radius: 6px;
+    background-color: var(--accent-foreground);
+    margin: 6px 0px;
+  }
+
+  .button-submit {
+    border-radius: 6px;
+    padding: 6px;
+    width: 100%;
+    margin: 6px 0px;
+    background-color: var(--primary);
+    color: var(--secondary-foreground);
+    font-weight: 600;
+    cursor: pointer;
+  }
 }

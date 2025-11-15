@@ -29,6 +29,22 @@ export async function POST(req: NextRequest) {
         { status: ApiResponseCode.INVALID_FORMAT }
       );
 
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { message: "Invalid file type. Only images are allowed" },
+        { status: ApiResponseCode.INVALID_FORMAT }
+      );
+    }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        { message: "File size exceeds 5MB limit" },
+        { status: ApiResponseCode.INVALID_FORMAT }
+      );
+    }
+
     const tags = JSON.parse(formData.get("tags") as string);
     const agenda = JSON.parse(formData.get("agenda") as string);
 
@@ -48,6 +64,9 @@ export async function POST(req: NextRequest) {
         .end(buffer);
     });
 
+    if (!uploadResult || typeof uploadResult !== 'object' || !('secure_url' in uploadResult)) {
+      throw new Error("Invalid Cloudinary upload response");
+    }
     event.image = (uploadResult as { secure_url: string }).secure_url;
 
     const createdEvent = await Event.create({
@@ -89,3 +108,5 @@ export async function GET() {
     );
   }
 }
+
+// a route that accepts a slug as input -> returns the event details
