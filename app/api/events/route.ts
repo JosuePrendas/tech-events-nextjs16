@@ -64,7 +64,11 @@ export async function POST(req: NextRequest) {
         .end(buffer);
     });
 
-    if (!uploadResult || typeof uploadResult !== 'object' || !('secure_url' in uploadResult)) {
+    if (
+      !uploadResult ||
+      typeof uploadResult !== "object" ||
+      !("secure_url" in uploadResult)
+    ) {
       throw new Error("Invalid Cloudinary upload response");
     }
     event.image = (uploadResult as { secure_url: string }).secure_url;
