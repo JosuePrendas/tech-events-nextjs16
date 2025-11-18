@@ -7,17 +7,51 @@ import { cacheLife } from "next/cache";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-if (!BASE_URL) {
-  throw new Error("NEXT_PUBLIC_BASE_URL environment variable is not defined");
-}
 const Home = async () => {
   "use cache";
   cacheLife("hours");
-  const response = await fetch(`${BASE_URL}/api/events`);
-  const { events } = await response.json();
+
+  if (!BASE_URL) {
+    throw new Error(
+      "NEXT_PUBLIC_BASE_URL environment variable is not defined"
+    );
+  }
+
+  let events: IEvent[] = [];
+  let error: string | null = null;
+
+  try {
+    const response = await fetch(`${BASE_URL}/api/events`);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch events: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+
+    if (!data || !Array.isArray(data.events)) {
+      console.error(
+        "Invalid events payload received from /api/events",
+        data
+      );
+      error = "Invalid events data received. Please try again later.";
+    } else {
+      events = data.events;
+    }
+  } catch (err) {
+    console.error("Error fetching events from /api/events", err);
+    error = "Unable to load events. Please try again later.";
+  }
 
   return (
     <section>
+      {error && (
+        <p className="mt-4 text-center text-sm text-red-500">
+          {error}
+        </p>
+      )}
       <AnimatedContent
         distance={100}
         direction="vertical"

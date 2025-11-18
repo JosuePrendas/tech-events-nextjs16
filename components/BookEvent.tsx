@@ -17,7 +17,7 @@ const BookEvent = () => {
   return (
     <div className="book-event">
       {submitted ? (
-        <p className="text-sm">Thank you for signin up!</p>
+        <p className="text-sm">Thank you for signing up!</p>
       ) : (
         <form onSubmit={handleSubmit}>
           <div className="flex-col-gap-2">
@@ -28,9 +28,10 @@ const BookEvent = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"
+              disabled={submitted}
             />
           </div>
-          <button type="submit" className="button-submit">
+          <button type="submit" className="button-submit" disabled={submitted}>
             Submit
           </button>
         </form>

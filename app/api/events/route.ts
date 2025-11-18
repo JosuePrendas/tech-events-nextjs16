@@ -103,12 +103,15 @@ export async function GET() {
 
     return NextResponse.json(
       { message: "Events fetched successfully", events },
-      { status: 200 }
+      { status: ApiResponseCode.DONE }
     );
   } catch (e) {
     return NextResponse.json(
-      { message: "Event fetching failed", error: e },
-      { status: 500 }
+      {
+        message: "Event fetching failed",
+        error: e instanceof Error ? e.message : "Unknown",
+      },
+      { status: ApiResponseCode.UNKNOWN }
     );
   }
 }

@@ -54,29 +54,47 @@ const EventDetailsPage = async ({
 }) => {
   const { slug } = await params;
   const BOOKINGS = 10;
-  const response = await fetch(`${BASE_URL}/api/events/${slug}`);
 
-  if (!response.ok) {
+  let event: Partial<IEvent> | null = null;
+
+  try {
+    const response = await fetch(`${BASE_URL}/api/events/${slug}`);
+
+    if (!response.ok) {
+      return notFound();
+    }
+
+    const data = await response.json();
+
+    if (!data || typeof data !== "object" || !data.event) {
+      console.error("Invalid event payload received for slug", slug, data);
+      return notFound();
+    }
+
+    event = data.event as IEvent;
+  } catch (error) {
+    console.error("Error fetching event details for slug", slug, error);
     return notFound();
   }
-  const {
-    event: {
-      title,
-      description,
-      image,
-      overview,
-      date,
-      time,
-      location,
-      mode,
-      agenda,
-      audience,
-      organizer,
-      tags,
-    },
-  } = await response.json();
 
-  if (!title) return notFound();
+  const {
+    title,
+    description,
+    image,
+    overview,
+    date,
+    time,
+    location,
+    mode,
+    agenda,
+    audience,
+    organizer,
+    tags,
+  } = event || {};
+
+  if (!title) {
+    return notFound();
+  }
 
   const similarEvents = await getSimilarEventsBySlug(slug);
 
