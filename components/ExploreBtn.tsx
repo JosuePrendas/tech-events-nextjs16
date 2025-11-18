@@ -41,6 +41,7 @@ const ExploreBtn = () => {
           alt="arrow-down"
           width={24}
           height={24}
+          style={{ marginLeft: "4px" }}
         />
       </AnimatedContent>
       {/* </a> */}
