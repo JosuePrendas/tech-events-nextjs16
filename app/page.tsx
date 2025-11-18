@@ -4,6 +4,7 @@ import ExploreBtn from "@/components/ExploreBtn";
 import FadeContent from "@/components/FadeContent";
 import { IEvent } from "@/database";
 import { cacheLife } from "next/cache";
+import { events } from "@/lib/constants";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -12,46 +13,44 @@ const Home = async () => {
   cacheLife("hours");
 
   if (!BASE_URL) {
-    throw new Error(
-      "NEXT_PUBLIC_BASE_URL environment variable is not defined"
-    );
+    throw new Error("NEXT_PUBLIC_BASE_URL environment variable is not defined");
   }
 
-  let events: IEvent[] = [];
-  let error: string | null = null;
+  // let events: IEvent[] = [];
+  // let error: string | null = null;
 
-  try {
-    const response = await fetch(`${BASE_URL}/api/events`);
+  // try {
+  //   const response = await fetch(`${BASE_URL}/api/events`);
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch events: ${response.status} ${response.statusText}`
-      );
-    }
+  //   if (!response.ok) {
+  //     throw new Error(
+  //       `Failed to fetch events: ${response.status} ${response.statusText}`
+  //     );
+  //   }
 
-    const data = await response.json();
+  //   const data = await response.json();
 
-    if (!data || !Array.isArray(data.events)) {
-      console.error(
-        "Invalid events payload received from /api/events",
-        data
-      );
-      error = "Invalid events data received. Please try again later.";
-    } else {
-      events = data.events;
-    }
-  } catch (err) {
-    console.error("Error fetching events from /api/events", err);
-    error = "Unable to load events. Please try again later.";
-  }
+  //   if (!data || !Array.isArray(data.events)) {
+  //     console.error(
+  //       "Invalid events payload received from /api/events",
+  //       data
+  //     );
+  //     error = "Invalid events data received. Please try again later.";
+  //   } else {
+  //     events = data.events;
+  //   }
+  // } catch (err) {
+  //   console.error("Error fetching events from /api/events", err);
+  //   error = "Unable to load events. Please try again later.";
+  // }
 
   return (
     <section>
-      {error && (
+      {/* {error && (
         <p className="mt-4 text-center text-sm text-red-500">
           {error}
         </p>
-      )}
+      )} */}
       <AnimatedContent
         distance={100}
         direction="vertical"
@@ -98,7 +97,7 @@ const Home = async () => {
           <div id="events" className="events">
             {events &&
               events.length > 0 &&
-              events.map((event: IEvent, index: number) => (
+              events.map((event, index: number) => (
                 <EventCard key={index} {...event} />
               ))}
           </div>
