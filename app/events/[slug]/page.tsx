@@ -2,6 +2,8 @@ import BookEvent from "@/components/BookEvent";
 import EventCard from "@/components/EventCard";
 import { IEvent } from "@/database";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
+import { getBookingCount } from "@/lib/actions/booking.actions";
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -52,13 +54,17 @@ const EventDetailsPage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  const { slug } = await params;
-  const BOOKINGS = 10;
+  "use cache";
+  cacheLife("hours");
 
-  let event: Partial<IEvent> | null = null;
+  const { slug } = await params;
+
+  let event: IEvent;
 
   try {
-    const response = await fetch(`${BASE_URL}/api/events/${slug}`);
+    const response = await fetch(`${BASE_URL}/api/events/${slug}`, {
+      next: { revalidate: 60 },
+    });
 
     if (!response.ok) {
       return notFound();
@@ -97,6 +103,7 @@ const EventDetailsPage = async ({
   }
 
   const similarEvents = await getSimilarEventsBySlug(slug);
+  const bookingCount = await getBookingCount(String(event._id));
 
   return (
     <section id="event">
@@ -155,14 +162,14 @@ const EventDetailsPage = async ({
         <aside className="booking">
           <div className="signup-card">
             <h2 className="text-lg font-semibold">Book Your Spot</h2>
-            {BOOKINGS > 0 ? (
+            {bookingCount > 0 ? (
               <p className="text-sm">
-                Join {BOOKINGS} people who have already booked their spot!
+                Join {bookingCount} people who have already booked their spot!
               </p>
             ) : (
               <p className="text-sm">Be the first to book your spot!</p>
             )}
-            <BookEvent />
+            <BookEvent eventId={String(event._id)} slug={event.slug} />
           </div>
         </aside>
       </div>
